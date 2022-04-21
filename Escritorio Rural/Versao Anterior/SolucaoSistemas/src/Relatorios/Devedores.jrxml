@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Devedores" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="397054b4-94a8-4526-8373-b208ac333339">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="saldoAtualizado" class="java.lang.Double"/>
+	<queryString>
+		<![CDATA[select c.cliente, f.nome, p.endereco, p.numero, p.cidade, p.telefone1, ((coalesce(sum(cr.valor), 0) - coalesce(sum(d.valor), 0)) * $P!{saldoAtualizado}) as saldos from caixa c
+left join debito d on d.caixa = c.codigo
+left join credito cr on cr.caixa = c.codigo
+inner join fisico f on f.pessoa = c.cliente
+inner join pessoa p on p.codigo = c.cliente where p.situacao in('ATIVO') group by c.cliente, f.nome, p.endereco, p.numero, p.cidade, p.telefone1 having ((coalesce(sum(cr.valor), 0) - coalesce(sum(d.valor), 0)) * $P!{saldoAtualizado}) <= -0.1 order by f.nome;]]>
+	</queryString>
+	<field name="cliente" class="java.lang.String"/>
+	<field name="nome" class="java.lang.String"/>
+	<field name="endereco" class="java.lang.String"/>
+	<field name="numero" class="java.lang.String"/>
+	<field name="cidade" class="java.lang.String"/>
+	<field name="telefone1" class="java.lang.String"/>
+	<field name="saldos" class="java.lang.Double"/>
+	<variable name="somar" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{saldos}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="28" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="118" height="12" uuid="6195f7ea-8a6c-4e6e-b477-7de051d87837"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[ESCRITÓRIO RURAL]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="14" width="305" height="12" uuid="beed81aa-04e7-4552-af1b-46813964b5f2"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[RELATÓRIO SINTÉTICO DE SALDOS CLIENTES * Só Devedores - VALOR INDICE]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="533" y="0" width="22" height="12" uuid="122bbd43-aac0-4b7e-8edc-06d5732f42a5"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="491" y="14" width="64" height="12" uuid="05afe9e4-caa5-4cd0-9195-0be94bc574d1"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="491" y="0" width="42" height="12" uuid="7e8644cb-8aac-4bd1-9172-7d2169e24f89"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[PAGINA]]></text>
+			</staticText>
+			<textField pattern="#,##0.00">
+				<reportElement x="320" y="14" width="62" height="12" uuid="2a445f63-5f5c-4646-9ff9-ea7d6649677e"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{saldoAtualizado}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="23" splitType="Stretch">
+			<line>
+				<reportElement x="0" y="2" width="555" height="1" uuid="58dba956-dc92-419d-9ecb-ff1f29c33ae9"/>
+				<graphicElement>
+					<pen lineStyle="Dashed"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement x="0" y="6" width="43" height="12" uuid="206c304e-b8ac-452a-85ba-3f7196200d6d"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Codigo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="43" y="6" width="138" height="12" uuid="770cbf1d-de01-4064-a0f8-4c002fdb7881"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Nome Cliente]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="207" y="6" width="130" height="12" uuid="a42c6b6f-9e6a-4b3e-85bf-acb02cc25b89"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Endereço]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="367" y="6" width="42" height="12" uuid="f92614cd-d585-41f4-ab44-145464727bbb"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Cidade]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="447" y="6" width="57" height="12" uuid="61879b70-64c6-4195-a09a-d48274959bbb"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Telefone]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="504" y="6" width="51" height="12" uuid="95e345ee-9c0c-4a1b-884b-20b3d96e72f6"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Saldo Atual]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="21" width="555" height="1" uuid="7709dde1-5f93-40c5-b7e2-e894f9b6c7f8"/>
+				<graphicElement>
+					<pen lineStyle="Dashed"/>
+				</graphicElement>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="15" splitType="Stretch">
+			<textField>
+				<reportElement x="43" y="2" width="164" height="12" uuid="fbe2a1c2-e66f-4240-a1a4-ff6273f6f83d"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nome}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="207" y="2" width="130" height="12" uuid="6565c7b9-d1b8-442a-be1d-188552ca4778"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{endereco}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="367" y="2" width="77" height="12" uuid="1fa4c2d4-d346-4d96-b1ff-1b8b34baa0d4"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{cidade}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="447" y="2" width="57" height="12" uuid="d8e7f7d6-9322-4d26-bd2b-06186354301e"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{telefone1}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement x="504" y="2" width="51" height="12" uuid="10b0d2df-f734-422a-8e79-31aec524cbb5"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{saldos}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="2" width="43" height="12" uuid="f5103779-033a-4cbb-b525-ea26d0d8614d"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{cliente}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="337" y="2" width="30" height="12" uuid="bda6d275-f49c-4c2d-83f5-e45693846b37"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{numero}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="17" splitType="Stretch">
+			<line>
+				<reportElement x="0" y="2" width="555" height="1" uuid="5d644ffa-48be-4583-90bb-726b051f9f91"/>
+				<graphicElement>
+					<pen lineStyle="Dashed"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement x="0" y="4" width="100" height="12" uuid="c31323f6-896a-4b76-a7f3-5dcd02f9945b"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Total:]]></text>
+			</staticText>
+			<textField pattern="#,##0.00">
+				<reportElement x="444" y="4" width="111" height="12" uuid="91a998a6-3195-4e43-b281-086091e66fd3"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{somar}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>
